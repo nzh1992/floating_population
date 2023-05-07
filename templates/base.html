@@ -10,20 +10,6 @@
     {% endblock %}
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('hello') }}">Home</a></li>
-        </ul>
-    </nav>
-
-    {% for message in get_flashed_messages() %}
-        <div class="alert"> {{ message }}</div>
-    {% endfor %}
-
     {% block content %}{% endblock %}
-
-    <footer>
-        <small>&copy; 2018 <a href="http://helloflask.com/book/3">HelloFlask</a></small>
-    </footer>
 </body>
 </html>

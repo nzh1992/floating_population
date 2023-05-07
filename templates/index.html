@@ -1,18 +1,5 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>{{ user.name }} ...</h2>
-    <p>{{ movies|length }}个电影</p>
-    <ul class="movie-list">
-        {% for movie in movies %}
-            <li>{{ movie.title }} - {{ movie.year }}</li>
-        {% endfor %}
-    </ul>
-
-    <h2>添加一个电影</h2>
-    <form method="post">
-        Name <input type="text" name="title", autocomplete="off" required>
-        Year <input type="text" name="year", autocomplete="off" required>
-        <input class="btn" type="submit" name="submit" value="Add">
-    </form>
+    index page.
 {% endblock %}

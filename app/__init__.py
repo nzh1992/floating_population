@@ -11,6 +11,8 @@ from flask import Flask
 from app.core.file_path import FilePath
 from app.models.user import User
 from app.models.role import Role
+from app.models.menu import Menu
+from app.models.population import Population
 
 
 def create_app():

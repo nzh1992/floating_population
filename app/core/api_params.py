@@ -10,8 +10,22 @@ from typing import Union, List
 from flask_siwadoc import BaseModel
 
 
+####################################################
+# Auth
+####################################################
 class LoginParam(BaseModel):
     account: str
     password: str
 
 
+class RegisterParam(BaseModel):
+    account: str
+    password: str
+    user_name: str
+    phone: Union[str, None]
+    role_id: int
+
+
+####################################################
+# User
+####################################################

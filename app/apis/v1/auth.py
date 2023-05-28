@@ -12,7 +12,7 @@ from flask import Blueprint, request, current_app
 
 from app.extentions import siwadoc
 from app.core.response import Response, ErrorResponse
-from app.core.api_params import LoginParam
+from app.core.api_params import LoginParam, RegisterParam
 from app.core.jwt import JWTUtil
 from app.models.user import User
 from app.apis import API_PREFIX
@@ -42,12 +42,14 @@ def login():
     access_token = access_token_data.get("access_token")
     token_expires = access_token_data.get("token_expires")
 
+    role = user.get_role()
+
     resp_data = {
         'access_token': access_token,
         'token_expires': token_expires,
         'user_id': user.id,
         'user_name': user.user_name,
-        'role_type': user.role_type
+        'role_type': role.name
     }
 
     return Response.make_response(0, "", resp_data)

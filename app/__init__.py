@@ -46,6 +46,8 @@ def register_blue_print(app):
 
 def register_commands(app):
     from app.extentions import db
+    from app.models.menu import Menu
+    from app.models.role import Role
 
     @app.cli.command()
     @click.option('--drop', is_flag=True, help='Create after drop')
@@ -59,5 +61,11 @@ def register_commands(app):
         if drop:
             db.drop_all()
 
+        # 创建表
         db.create_all()
-        click.echo('Initailized database.')
+        click.echo("Create Tables, ok.")
+
+        # 初始化表
+        Menu.init_db()
+        Role.init_db()
+        click.echo("Initialized Tables, ok.")

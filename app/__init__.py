@@ -8,22 +8,16 @@ Description:
 import click
 from flask import Flask
 
-from .utils import FilePath
+from app.core.file_path import FilePath
 from app.models.user import User
 from app.models.role import Role
 
 
 def create_app():
-    # 模板路径
-    template_folder = FilePath.get_template_folder()
-    # 静态资源路径
-    static_folder = FilePath.get_static_folder()
-    # 配置文件路径
-    serring_fp = FilePath.get_setting_fp()
+    app = Flask(__name__,)
 
-    app = Flask(__name__, template_folder=template_folder, static_folder=static_folder)
-
-    app.config.from_pyfile(serring_fp)
+    setting_fp = FilePath.get_setting_fp()
+    app.config.from_pyfile(setting_fp)
 
     register_extentions(app)
 
@@ -36,14 +30,16 @@ def create_app():
 
 def register_extentions(app):
     from .extentions import db
+    from .extentions import siwadoc
 
     db.init_app(app)
+    siwadoc.init_app(app)
 
 
 def register_blue_print(app):
-    from app.blue_prints.login import login_bp
+    from app.apis.v1.auth import auth_bp
 
-    app.register_blueprint(login_bp)
+    app.register_blueprint(auth_bp)
 
 
 def register_commands(app):

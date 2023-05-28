@@ -5,36 +5,29 @@ Created Date: 2023/5/6
 Last Modified: 2023/5/6
 Description: 
 """
-from flask import Blueprint, request, render_template, flash
+from flask import Blueprint, request
 
 from app.models.user import User
 from app.extentions import db
+from app.core.response import ErrorResponse
 
 
 login_bp = Blueprint('login', __name__)
 
 
-@login_bp.route('/login', methods=['GET', 'POST'])
+@login_bp.route('/login', methods=['POST'])
 def login():
-    render_data = {}
+    data = request.get_json(force=True)
+    account = request.form.get("account")
+    password = request.form.get("password")
 
-    if request.method == 'GET':
-        return render_template("login.html", render_data=render_data)
-    else:
-        account = request.form.get("account")
-        password = request.form.get("password")
+    user = User.query.filter(User.account == account).first()
 
-        user = User.query.filter(User.account == account).first()
+    if not user:
+        return ErrorResponse.login_user_not_exist(), 406
 
-        if not user:
-            render_data["msg"] = "用户不存在"
-            return render_template("login.html", render_data=render_data)
-
-        if not user.check_password(password):
-            render_data["msg"] = "密码错误"
-            return render_template("login.html", render_data=render_data)
-
-        return render_template("index.html")
+    if not user.check_password(password):
+        return ErrorResponse.login_failed(), 406
 
 
 @login_bp.route('/register', methods=["POST"])

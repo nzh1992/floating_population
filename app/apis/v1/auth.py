@@ -16,6 +16,7 @@ from app.core.api_params import LoginParam
 from app.core.jwt import JWTUtil
 from app.models.user import User
 from app.apis import API_PREFIX
+from app.extentions import db
 
 
 auth_bp = Blueprint('auth', __name__, url_prefix=API_PREFIX + '/auth')
@@ -50,3 +51,22 @@ def login():
     }
 
     return Response.make_response(0, "", resp_data)
+
+
+@auth_bp.route('/register', methods=["POST"])
+@siwadoc.doc(tags=['auth'], summary="注册账号", body=LoginParam)
+def register():
+    data = request.get_json(force=True)
+    account = data.get("account")
+    password = data.get("password")
+    user_name = data.get("user_name")
+    phone = data.get("phone")
+    role_id = data.get("role_id")
+
+    user = User(account=account, user_name=user_name, phone=phone, role_id=role_id)
+    user.set_password(password)
+
+    db.session.add(user)
+    db.session.commit()
+
+    return Response.make_response(0, "ok")

@@ -29,20 +29,24 @@ class ErrorResponse:
 
     @staticmethod
     def login_user_not_exist():
-        return make_response(1001, "登录用户名不存在")
+        return make_response(1001, "登录用户名不存在"), 406
 
     @staticmethod
     def login_failed():
-        return make_response(1002, "用户名或密码错误")
+        return make_response(1002, "用户名或密码错误"), 406
 
     @staticmethod
     def request_missing_token():
-        return make_response(1003, "请求头缺少token")
+        return make_response(1003, "请求头缺少token"), 401
 
     @staticmethod
     def request_token_expired():
-        return make_response(1004, "token过期")
+        return make_response(1004, "token过期"), 401
 
     @staticmethod
     def request_token_error():
-        return make_response(1005, "token错误")
+        return make_response(1005, "token错误"), 401
+
+    @staticmethod
+    def role_not_found():
+        return make_response(1006, "角色不存在"), 406

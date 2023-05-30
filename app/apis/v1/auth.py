@@ -32,10 +32,10 @@ def login():
     user = User.query.filter(User.account == account).first()
 
     if not user:
-        return ErrorResponse.login_user_not_exist(), 406
+        return ErrorResponse.login_user_not_exist()
 
     if not user.check_password(password):
-        return ErrorResponse.login_failed(), 406
+        return ErrorResponse.login_failed()
 
     # 生成token
     access_token_data = JWTUtil.create_token(user.id)
@@ -56,7 +56,7 @@ def login():
 
 
 @auth_bp.route('/register', methods=["POST"])
-@siwadoc.doc(tags=['auth'], summary="注册账号", body=LoginParam)
+@siwadoc.doc(tags=['auth'], summary="注册账号", body=RegisterParam)
 def register():
     data = request.get_json(force=True)
     account = data.get("account")

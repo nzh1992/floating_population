@@ -15,8 +15,9 @@ class Menu(db.Model):
     __tablename__ = "menu"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64))          # 菜单名称
-    parent_id = db.Column(db.Integer)            # 该角色可访问菜单的id列表
+    name = db.Column(db.String(128))              # 菜单名称
+    router = db.Column(db.String(128))            # 路由
+    parent_id = db.Column(db.Integer)             # 该角色可访问菜单的id列表
 
     def __repr__(self):
         return f"<Menu id={self.id} name={self.name}>"
@@ -28,11 +29,11 @@ class Menu(db.Model):
         menu_ids = [m.id for m in menus]
 
         # 工作台(一级菜单)
-        workbench = Menu(id=1, name="工作台", parent_id=0)
+        workbench = Menu(id=1, name="工作台", router="/workbench", parent_id=0)
         # 录入
-        enter = Menu(id=2, name="录入", parent_id=0)
+        enter = Menu(id=2, name="录入", router="/enterManage", parent_id=0)
         # 审批
-        approval = Menu(id=3, name="审批", parent_id=0)
+        approval = Menu(id=3, name="审批", router="/approvalManage", parent_id=0)
 
         if workbench.id not in menu_ids:
             db.session.add(workbench)

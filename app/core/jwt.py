@@ -55,11 +55,8 @@ class JWTUtil:
         :return: 返回值中code为枚举值，0成功，1token错误，2token过期
         """
         try:
-            # 参数token格式: "Bearer {token}"，所以需要获取原始token
-            raw_token = token.split('Bearer ')[1]
-
             # 解析token
-            payload = jwt.decode(raw_token, cls.secret, algorithms=[cls.algorithm])
+            payload = jwt.decode(token, cls.secret, algorithms=[cls.algorithm])
         except PyJWTError:
             logger.exception("Token解析失败")
             return {'result': False, 'msg': "Token解析失败", "code": 1}
@@ -82,23 +79,23 @@ class JWTUtil:
 
             @wraps(func)
             def wrapper(*args, **kwargs):
-                token = request.headers.get("Authorization")
+                token = request.headers.get("token")
 
                 # 如果header中没有，再到查询参数中找
                 if not token:
-                    token = request.args.get("Authorization")
+                    token = request.args.get("token")
 
                 # 如果查询参数中也没有，报错处理
                 if not token:
-                    return ErrorResponse.request_missing_token(), 401
+                    return ErrorResponse.request_missing_token()
 
                 try:
                     result = cls.verify_token(token)
 
                     if result.get("code") == 1:
-                        return ErrorResponse.request_token_error(), 401
+                        return ErrorResponse.request_token_error()
                     elif result.get("code") == 2:
-                        return ErrorResponse.request_token_expired(), 401
+                        return ErrorResponse.request_token_expired()
                     elif result.get("code") == 0:
                         user = User.query.filter(User.id == result.get("id")).first()
                         request.user = user

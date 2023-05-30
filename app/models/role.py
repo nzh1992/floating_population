@@ -8,6 +8,7 @@ Description:
 import json
 
 from app.extentions import db
+from app.core.log_helper import logger
 
 
 class Role(db.Model):
@@ -23,19 +24,30 @@ class Role(db.Model):
     @classmethod
     def init_db(cls):
         """初始化数据库调用"""
+        roles = Role.query.filter().all()
+        role_ids = [r.id for r in roles]
+
         # 管理员
-        admin_menu_ids = json.dumps([])
+        admin_menu_ids = json.dumps([1,2,3])
         admin = cls(id=1, name="ADMIN", menu_ids=admin_menu_ids)
 
         # 录入员
-        enter_menu_ids = json.dumps([])
+        enter_menu_ids = json.dumps([1,2])
         enter = cls(id=2, name="ENTER", menu_ids=enter_menu_ids)
 
         # 审批员
-        approval_menu_ids = json.dumps([])
+        approval_menu_ids = json.dumps([1,3])
         approval = cls(id=3, name="APPROVAL", menu_ids=approval_menu_ids)
 
-        db.session.add(admin)
-        db.session.add(enter)
-        db.session.add(approval)
+        if admin.id not in role_ids:
+            db.session.add(admin)
+            logger.info("初始化--角色--管理员, 完成。")
+        if enter.id not in role_ids:
+            db.session.add(enter)
+            logger.info("初始化--角色--录入员, 完成。")
+        if approval.id not in role_ids:
+            db.session.add(approval)
+            logger.info("初始化--角色--审批员, 完成。")
+
         db.session.commit()
+        logger.info("全部角色初始化, 完成。")

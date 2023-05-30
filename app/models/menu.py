@@ -8,6 +8,7 @@ Description:
 import json
 
 from app.extentions import db
+from app.core.log_helper import logger
 
 
 class Menu(db.Model):
@@ -23,8 +24,25 @@ class Menu(db.Model):
     @classmethod
     def init_db(cls):
         """初始化数据库调用"""
+        menus = Menu.query.filter().all()
+        menu_ids = [m.id for m in menus]
+
         # 工作台(一级菜单)
         workbench = Menu(id=1, name="工作台", parent_id=0)
+        # 录入
+        enter = Menu(id=2, name="录入", parent_id=0)
+        # 审批
+        approval = Menu(id=3, name="审批", parent_id=0)
 
-        db.session.add(workbench)
+        if workbench.id not in menu_ids:
+            db.session.add(workbench)
+            logger.info("初始化--菜单--工作台, 完成。")
+        if enter.id not in menu_ids:
+            db.session.add(enter)
+            logger.info("初始化--菜单--录入, 完成。")
+        if approval.id not in menu_ids:
+            db.session.add(approval)
+            logger.info("初始化--菜单--审批, 完成。")
+
         db.session.commit()
+        logger.info("全部菜单初始化, 完成。")

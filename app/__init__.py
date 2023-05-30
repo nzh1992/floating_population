@@ -41,9 +41,11 @@ def register_extentions(app):
 def register_blue_print(app):
     from app.apis.v1.auth import auth_bp
     from app.apis.v1.role import role_bp
+    from app.apis.v1.population import population_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(role_bp)
+    app.register_blueprint(population_bp)
 
 
 def register_commands(app):

@@ -22,3 +22,9 @@ class FilePath:
     @classmethod
     def get_logger_fp(cls):
         logger_fp = ""
+
+    @classmethod
+    def get_files_dir(cls):
+        """获取上传文件路径"""
+        file_dir = os.path.join(cls.get_root_path(), "files")
+        return file_dir

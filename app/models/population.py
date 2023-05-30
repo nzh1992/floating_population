@@ -5,7 +5,10 @@ Created Date: 2023/5/28
 Last Modified: 2023/5/28
 Description: 
 """
+import os
+
 from app.extentions import db
+from app.core.file_path import FilePath
 
 
 class Population(db.Model):
@@ -32,3 +35,21 @@ class Population(db.Model):
 
     def __repr__(self):
         return f"<Menu id={self.id} name={self.name}>"
+
+    def set_picture_dir(self):
+        """
+        设置流动人口照片存放路径
+        路径规则：项目根目录/files/<population_id>/pictures
+        """
+        data_dir = FilePath.get_files_dir()
+        pictures_dir = os.path.join(data_dir, str(self.id), "pictures")
+        self.picture_dir = pictures_dir
+
+    def set_voiceprint_dir(self):
+        """
+        设置流动人口声纹存放路径
+        路径规则：项目根目录/files/<population_id>/voiceprints
+        """
+        data_dir = FilePath.get_files_dir()
+        voiceprint_dir = os.path.join(data_dir, str(self.id), "voiceprints")
+        self.voiceprint_dir = voiceprint_dir

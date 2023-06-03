@@ -50,3 +50,7 @@ class ErrorResponse:
     @staticmethod
     def role_not_found():
         return make_response(1006, "角色不存在"), 406
+
+    @staticmethod
+    def population_not_found():
+        return make_response(1007, "流动人口不存在"), 406

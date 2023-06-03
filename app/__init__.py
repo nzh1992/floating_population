@@ -5,6 +5,7 @@ Created Date: 2023/5/6
 Last Modified: 2023/5/6
 Description: 
 """
+import os
 import click
 from flask import Flask
 
@@ -20,6 +21,8 @@ def create_app():
 
     setting_fp = FilePath.get_setting_fp()
     app.config.from_pyfile(setting_fp)
+
+    create_files_dir()
 
     register_extentions(app)
 
@@ -73,3 +76,9 @@ def register_commands(app):
         Menu.init_db()
         Role.init_db()
         click.echo("Initialized Tables, ok.")
+
+
+def create_files_dir():
+    """创建文件存放目录"""
+    files_dir = FilePath.get_files_dir()
+    os.makedirs(files_dir, exist_ok=True)

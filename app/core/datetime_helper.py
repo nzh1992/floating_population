@@ -23,3 +23,11 @@ class DatetimeHelper:
         """
         current_datetime = datetime.now().strftime(cls.DATETIME_FORMAT)
         return current_datetime
+
+    @classmethod
+    def get_datetime_str(cls, dt):
+        """
+        获取给定时间的字符串格式
+        """
+        dt_str = dt.strftime(cls.DATETIME_FORMAT)
+        return dt_str

@@ -37,7 +37,7 @@ class Role(db.Model):
 
         # 审批员
         approval_menu_ids = json.dumps([1,3])
-        approval = cls(id=3, name="APPROVAL", menu_ids=approval_menu_ids)
+        approval = cls(id=3, name="AUDIT", menu_ids=approval_menu_ids)
 
         if admin.id not in role_ids:
             db.session.add(admin)

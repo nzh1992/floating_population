@@ -45,11 +45,12 @@ def login():
     role = user.get_role()
 
     resp_data = {
-        'access_token': access_token,
-        'token_expires': token_expires,
-        'user_id': user.id,
-        'user_name': user.user_name,
-        'role_type': role.name
+        'token': access_token,
+        'userInfo': {
+            "id": user.id,
+            "name": user.user_name,
+            "role_type": role.name
+        }
     }
 
     return Response.make_response(0, "", resp_data)

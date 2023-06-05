@@ -30,20 +30,25 @@ class Menu(db.Model):
 
         # 工作台(一级菜单)
         workbench = Menu(id=1, name="工作台", router="/workbench", parent_id=0)
-        # 录入
-        enter = Menu(id=2, name="录入", router="/enterManage", parent_id=0)
-        # 审批
-        approval = Menu(id=3, name="审批", router="/approvalManage", parent_id=0)
+        # 录入管理
+        enter = Menu(id=2, name="录入管理", router="/enterManage", parent_id=0)
+        # 审批管理
+        approval = Menu(id=3, name="审批管理", router="/approvalManage", parent_id=0)
+        # 用户管理
+        user_manage = Menu(id=4, name="用户管理", router="/userManage", parent_id=0)
 
         if workbench.id not in menu_ids:
             db.session.add(workbench)
             logger.info("初始化--菜单--工作台, 完成。")
         if enter.id not in menu_ids:
             db.session.add(enter)
-            logger.info("初始化--菜单--录入, 完成。")
+            logger.info("初始化--菜单--录入管理, 完成。")
         if approval.id not in menu_ids:
             db.session.add(approval)
-            logger.info("初始化--菜单--审批, 完成。")
+            logger.info("初始化--菜单--审批管理, 完成。")
+        if user_manage.id not in menu_ids:
+            db.session.add(user_manage)
+            logger.info("初始化--菜单--用户管理, 完成。")
 
         db.session.commit()
         logger.info("全部菜单初始化, 完成。")

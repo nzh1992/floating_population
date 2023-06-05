@@ -23,14 +23,15 @@ from app.models.menu import Menu
 role_bp = Blueprint('role', __name__, url_prefix=API_PREFIX + '/role')
 
 
-@role_bp.route("/<id>", methods=["GET"])
-@siwadoc.doc(tags=['role'], summary="根据角色id查询可访问菜单")
+@role_bp.route("/permission", methods=["POST"])
+@siwadoc.doc(tags=['role'], summary="根据角色名称查询可访问菜单")
 @JWTUtil.verify_token_decorator(request)
 def add_client(*args, **kwargs):
-    role_id = args[1].get("id")
-    role = Role.query.filter(Role.id == role_id).first()
+    data = request.get_json(force=True)
+    role_type = data.get("role_type")
+    role = Role.query.filter(Role.name == role_type).first()
     if not role:
-        logger.error(f"查询角色失败，role_id: {role_id}")
+        logger.error(f"查询角色失败，role_type: {role_type}")
         return ErrorResponse.role_not_found()
 
     # 角色数据
@@ -41,14 +42,13 @@ def add_client(*args, **kwargs):
 
     # 查询相关菜单
     menu_ids = json.loads(role.menu_ids)
-    menus = Menu.query.filter(Menu.id.in_(menu_ids)).all()
+    menus = Menu.query.filter().all()
     access_menus = []
     for menu in menus:
         access_menu_data = {
-            "id": menu.id,
             "name": menu.name,
             "menu": menu.router,
-            "children": []
+            "access": True if menu.id in menu_ids else False
         }
         access_menus.append(access_menu_data)
 

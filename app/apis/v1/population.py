@@ -72,7 +72,8 @@ def add_population(*args, **kwargs):
     db.session.add(population)
     db.session.commit()
 
-    return Response.make_response(0, "ok")
+    resp_data = {}
+    return resp_data
 
 
 @population_bp.route("/<id>", methods=["PATCH"])
@@ -118,7 +119,8 @@ def modify_population(*args, **kwargs):
     db.session.add(population)
     db.session.commit()
 
-    return Response.make_response(0, "ok")
+    resp_data = {}
+    return resp_data
 
 
 @population_bp.route("/<id>", methods=["GET"])
@@ -145,4 +147,44 @@ def population_detail(*args, **kwargs):
         "marital_status": population.marital_status
     }
 
-    return Response.make_response(0, "ok", population_data)
+    resp_data = {
+        "data": population_data
+    }
+    return resp_data
+
+
+@population_bp.route("/list", methods=["POST"])
+@siwadoc.doc(tags=['population'], summary="流动人口列表")
+def population_list(*args, **kwargs):
+    data = request.get_json(force=True)
+    keyword = data.get("keyword")
+    pn = data.get("pn")
+    pz = data.get("pz")
+
+    query_filter = Population.query.filter()
+
+    if keyword:
+        query_filter.filter(Population.name.like(f"%{keyword}%"))
+
+    total = query_filter.count()
+
+    start = (pn - 1) * pz
+    populations = query_filter.limit(pz).offset(start).all()
+
+    serialize_population_list = []
+    for population in populations:
+        population_data = {
+            "id": population.id,
+            "name": population.name,
+            "age": population.age,
+            "sex": population.sex,
+            "native_place_province": population.native_place_province
+        }
+        serialize_population_list.append(population_data)
+
+    resp_data = {
+        "total": total,
+        "list": serialize_population_list
+    }
+
+    return resp_data

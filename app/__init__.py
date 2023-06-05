@@ -47,10 +47,14 @@ def register_blue_print(app):
     from app.apis.v1.auth import auth_bp
     from app.apis.v1.role import role_bp
     from app.apis.v1.population import population_bp
+    from app.apis.v1.user import user_bp
+    from app.apis.v1.upload import upload_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(role_bp)
     app.register_blueprint(population_bp)
+    app.register_blueprint(user_bp)
+    app.register_blueprint(upload_bp)
 
 
 def initdb(app, drop=None):

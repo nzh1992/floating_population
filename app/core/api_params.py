@@ -29,7 +29,11 @@ class RegisterParam(BaseModel):
 ####################################################
 # User
 ####################################################
-
+class UserListParam(BaseModel):
+    role_type: Union[str, None]
+    keyword: Union[str, None]
+    pn: int
+    pz: int
 
 
 ####################################################

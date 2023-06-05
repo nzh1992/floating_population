@@ -72,4 +72,7 @@ def register():
     db.session.add(user)
     db.session.commit()
 
-    return Response.make_response(0, "ok")
+    resp_data = {
+
+    }
+    return resp_data

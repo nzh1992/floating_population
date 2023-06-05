@@ -33,7 +33,7 @@ class Menu(db.Model):
         # 录入管理
         enter = Menu(id=2, name="录入管理", router="/enterManage", parent_id=0)
         # 审批管理
-        approval = Menu(id=3, name="审批管理", router="/approvalManage", parent_id=0)
+        approval = Menu(id=3, name="审批管理", router="/auditManage", parent_id=0)
         # 用户管理
         user_manage = Menu(id=4, name="用户管理", router="/userManage", parent_id=0)
 

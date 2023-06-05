@@ -54,3 +54,15 @@ class ErrorResponse:
     @staticmethod
     def population_not_found():
         return make_response(1007, "流动人口不存在"), 406
+
+    @staticmethod
+    def upload_picture_type_error():
+        return make_response(1008, "上传图片类型错误"), 406
+
+    @staticmethod
+    def upload_voiceprint_type_error():
+        return make_response(1008, "上传声纹类型错误"), 406
+
+    @staticmethod
+    def user_not_found():
+        return make_response(1009, "用户不存在"), 406

@@ -46,4 +46,8 @@ def add_client(*args, **kwargs):
         }
         access_menus.append(access_menu_data)
 
-    return Response.make_response(0, "ok", access_menus)
+    resp_data = {
+        "data": access_menus
+    }
+
+    return resp_data

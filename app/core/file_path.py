@@ -11,7 +11,7 @@ import os
 class FilePath:
     @classmethod
     def get_root_path(cls):
-        root_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        root_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         return root_path
 
     @classmethod

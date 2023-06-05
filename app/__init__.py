@@ -30,6 +30,8 @@ def create_app():
 
     register_commands(app)
 
+    initdb(app)
+
     return app
 
 
@@ -50,6 +52,27 @@ def register_blue_print(app):
     app.register_blueprint(role_bp)
     app.register_blueprint(population_bp)
 
+
+def initdb(app, drop=None):
+    """初始化数据库"""
+    with app.app_context():
+        from sqlalchemy import text
+        from .extentions import db
+        cursor = db.session.execute(text("show databases;"))
+        result = [row[0] for row in cursor]
+        print(result)
+
+        if drop:
+            db.drop_all()
+
+        # 创建表
+        db.create_all()
+        click.echo("Create Tables, ok.")
+
+        # 初始化表
+        Menu.init_db()
+        Role.init_db()
+        click.echo("Initialized Tables, ok.")
 
 def register_commands(app):
     from app.extentions import db

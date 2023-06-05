@@ -34,12 +34,6 @@ def add_client(*args, **kwargs):
         logger.error(f"查询角色失败，role_type: {role_type}")
         return ErrorResponse.role_not_found()
 
-    # 角色数据
-    role_data = {
-        "id": role.id,
-        "name": role.name
-    }
-
     # 查询相关菜单
     menu_ids = json.loads(role.menu_ids)
     menus = Menu.query.filter().all()
@@ -52,6 +46,4 @@ def add_client(*args, **kwargs):
         }
         access_menus.append(access_menu_data)
 
-    role_data.update({"access": access_menus})
-
-    return Response.make_response(0, "ok", role_data)
+    return Response.make_response(0, "ok", access_menus)

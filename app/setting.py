@@ -17,3 +17,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 DOMAIN = "http://47.103.15.19"
+
+# 上传图片、声纹文件的最大值
+# 注意Nginx上也要配置
+MAX_CONTENT_LENGTH = 20 * 1024 * 1024

@@ -42,7 +42,10 @@ def upload_picture(*args, **kwargs):
     if file_extension not in valid_extension:
         return ErrorResponse.upload_picture_type_error()
 
-    save_fp = os.path.join(upload_dir, temp_file_uuid, "pictures", file_name)
+    save_dir = os.path.join(upload_dir, temp_file_uuid, "pictures")
+    os.makedirs(save_dir, exist_ok=True)
+
+    save_fp = os.path.join(save_dir, file_name)
     file.save(save_fp)
 
     # 下载url
@@ -73,7 +76,10 @@ def upload_voiceprint(*args, **kwargs):
     if file_extension not in valid_extension:
         return ErrorResponse.upload_voiceprint_type_error()
 
-    save_fp = os.path.join(upload_dir, temp_file_uuid, "voiceprints", file_name)
+    save_dir = os.path.join(upload_dir, temp_file_uuid, "voiceprints")
+    os.makedirs(save_dir, exist_ok=True)
+
+    save_fp = os.path.join(save_dir, file_name)
     file.save(save_fp)
 
     # 下载url

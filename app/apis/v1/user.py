@@ -54,7 +54,7 @@ def user_list(*args, **kwargs):
         user_data = {
             "id": user.id,
             "account": user.account,
-            "user_name": user.user_name,
+            "name": user.user_name,
             "role_type": role.name
         }
         serialize_user_list.append(user_data)
@@ -80,3 +80,49 @@ def delete_user(*args, **kwargs):
     db.session.commit()
 
     return {}
+
+
+@user_bp.route("/", methods=["PUT"])
+@siwadoc.doc(tags=['user'], summary="创建用户")
+@JWTUtil.verify_token_decorator(request)
+def create_user(*args, **kwargs):
+    data = request.get_json(force=True)
+    name = data.get("name")
+    account = data.get("account")
+    password = data.get("password")
+    role_type = data.get("role_type")
+
+    # 查询role
+    role = Role.query.filter(Role.name == role_type).first()
+
+    user = User(account=account, user_name=name, phone=None, role_id=role.id)
+    user.set_password(password)
+
+    db.session.add(user)
+    db.session.commit()
+
+    resp_data = {
+
+    }
+    return resp_data
+
+
+@user_bp.route("/<id>", methods=["GET"])
+@siwadoc.doc(tags=['user'], summary="用户详情")
+@JWTUtil.verify_token_decorator(request)
+def user_detail(*args, **kwargs):
+    user_id = args[1].get("id")
+
+    user = User.query.filter(User.id == user_id).first()
+
+    # role_type
+    role = Role.query.filter(Role.id == user.role_id).first()
+
+    user_data = {
+        "id": user.id,
+        "name": user.user_name,
+        "account": user.account,
+        "role_type": role.name
+    }
+
+    return user_data

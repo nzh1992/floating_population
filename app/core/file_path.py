@@ -28,3 +28,9 @@ class FilePath:
         """获取上传文件路径"""
         file_dir = os.path.join(cls.get_root_path(), "files")
         return file_dir
+
+    @classmethod
+    def get_region_file_path(cls):
+        """获取省市区文件路径"""
+        file_path = os.path.join(cls.get_root_path(), "region", "最新县及县以上行政区划代码.txt")
+        return file_path

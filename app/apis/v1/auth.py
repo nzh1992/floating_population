@@ -40,7 +40,6 @@ def login():
     # 生成token
     access_token_data = JWTUtil.create_token(user.id)
     access_token = access_token_data.get("access_token")
-    token_expires = access_token_data.get("token_expires")
 
     role = user.get_role()
 
@@ -55,24 +54,3 @@ def login():
 
     return Response.make_response(0, "", resp_data)
 
-
-@auth_bp.route('/register', methods=["POST"])
-@siwadoc.doc(tags=['auth'], summary="注册账号", body=RegisterParam)
-def register():
-    data = request.get_json(force=True)
-    account = data.get("account")
-    password = data.get("password")
-    user_name = data.get("user_name")
-    phone = data.get("phone")
-    role_id = data.get("role_id")
-
-    user = User(account=account, user_name=user_name, phone=phone, role_id=role_id)
-    user.set_password(password)
-
-    db.session.add(user)
-    db.session.commit()
-
-    resp_data = {
-
-    }
-    return resp_data

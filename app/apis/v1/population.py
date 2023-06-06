@@ -9,12 +9,12 @@ import json
 import datetime
 
 from flask import Blueprint, request
+from sqlalchemy import or_
 
 from app.apis import API_PREFIX
 from app.core.jwt import JWTUtil
 from app.core.response import Response, ErrorResponse
-from app.core.datetime_helper import DatetimeHelper
-from app.core.log_helper import logger
+from app.core.enums import MaritalEnum
 from app.core.api_params import AddPopulationParam
 from app.extentions import siwadoc, db
 from app.models.population import Population
@@ -154,13 +154,27 @@ def population_detail(*args, **kwargs):
 def population_list(*args, **kwargs):
     data = request.get_json(force=True)
     keyword = data.get("keyword")
+    audit_status = data.get("audit_status")
+    native = data.get("native")
     pn = data.get("pn")
     pz = data.get("pz")
 
     query_filter = Population.query.filter()
 
     if keyword:
-        query_filter.filter(Population.name.like(f"%{keyword}%"))
+        condition = or_(
+            Population.name.like(f"%{keyword}%"),
+            Population.id_number.like(f"%{keyword}%")
+        )
+        query_filter.filter(condition)
+
+    if audit_status:
+        query_filter.filter(Population.status == audit_status)
+
+    if native:
+        query_filter.filter(Population.native_place_province == native[0])\
+            .filter(Population.native_place_city == native[1])\
+            .filter(Population.native_place_area == native[2])
 
     total = query_filter.count()
 
@@ -169,11 +183,19 @@ def population_list(*args, **kwargs):
 
     serialize_population_list = []
     for population in populations:
+        # 查询婚姻状况枚举
+        marital = [m for m in MaritalEnum if m.get("value") == population.marital_status][0]
+
         population_data = {
             "id": population.id,
             "name": population.name,
             "age": population.age,
-            "sex": population.sex
+            "gender": population.sex,
+            "marital_status": marital,
+            "id_number": population.id_number,
+            "native": [population.native_place_province, population.native_place_city, population.native_place_area],
+            "status": population.status,
+            "reason": population.reason
         }
         serialize_population_list.append(population_data)
 

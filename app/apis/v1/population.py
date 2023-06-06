@@ -219,3 +219,24 @@ def delete_population(*args, **kwargs):
 
     db.session.delete(population)
     db.session.commit()
+
+    return {}
+
+
+@population_bp.route("/submit", methods=["POST"])
+@siwadoc.doc(tags=['population'], summary="提交")
+@JWTUtil.verify_token_decorator(request)
+def submit_population(*args, **kwargs):
+    data = request.get_json(force=True)
+    population_id = data.get("id")
+
+    population = Population.query.filter(Population.id == population_id).first()
+    if not population:
+        return ErrorResponse.population_not_found()
+
+    population.status = "AUDITING"
+
+    db.session.add(population)
+    db.session.commit()
+
+    return {}

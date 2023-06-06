@@ -52,5 +52,5 @@ def login():
         }
     }
 
-    return Response.make_response(0, "", resp_data)
+    return resp_data
 

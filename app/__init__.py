@@ -50,6 +50,7 @@ def register_blue_print(app):
     from app.apis.v1.user import user_bp
     from app.apis.v1.upload import upload_bp
     from app.apis.v1.region import region_bp
+    from app.apis.v1.enums import academic_bp, marital_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(role_bp)
@@ -57,6 +58,8 @@ def register_blue_print(app):
     app.register_blueprint(user_bp)
     app.register_blueprint(upload_bp)
     app.register_blueprint(region_bp)
+    app.register_blueprint(academic_bp)
+    app.register_blueprint(marital_bp)
 
 
 def initdb(app, drop=None):

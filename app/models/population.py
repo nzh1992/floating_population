@@ -20,7 +20,7 @@ class Population(db.Model):
     sex = db.Column(db.String(128))                         # 性别
     academic_qualification = db.Column(db.String(128))      # 学历
     id_number = db.Column(db.String(128))                   # 身份证号
-    address = db.Column(db.String(255))                     # 当前住址
+    address = db.Column(db.Text)                            # 当前住址
     detail_address = db.Column(db.String(255))              # 当前详细住址
     native_place_province = db.Column(db.String(128))       # 籍贯省
     native_place_city = db.Column(db.String(128))           # 籍贯市

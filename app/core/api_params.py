@@ -53,20 +53,17 @@ class AddPopulationParam(BaseModel):
     # 年龄
     age: int
     # 性别
-    sex: str
-    # 出生年月日
-    birth: str
+    gender: str
     # 学历
     academic_qualification: str
-    # 身份证号
-    id_number: str
-    # 当前住址
-    address: str
-    # 籍贯省
-    native_place_province: str
-    # 籍贯市
-    native_place_city: str
-    # 籍贯区
-    native_place_area: str
     # 婚姻状况
     marital_status: str
+    # 身份证号
+    id_number: str
+    # 籍贯省市区
+    native: List
+    # 当前住址
+    address: List
+    # 当前住址
+    detail_address: str
+

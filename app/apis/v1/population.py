@@ -41,6 +41,7 @@ def add_population(*args, **kwargs):
     native_place_city = native[1]
     native_place_area = native[2]
     address = data.get("address")
+    address_json = json.dumps(address)
     detail_address = data.get("detail_address")
     voiceprint = data.get("voiceprint")
     picture = data.get("picture")
@@ -51,7 +52,7 @@ def add_population(*args, **kwargs):
     # 默认提交状态为"未审批"
     status = "UN_AUDIT"
     population = Population(name=name, age=age, sex=sex, academic_qualification=academic_qualification,
-                            id_number=id_number, address=address, detail_address=detail_address,
+                            id_number=id_number, address=address_json, detail_address=detail_address,
                             native_place_province=native_place_province, native_place_city=native_place_city,
                             native_place_area=native_place_area, marital_status=marital_status,
                             status=status, voiceprint=voiceprint_json, picture=picture_json)
@@ -103,7 +104,7 @@ def modify_population(*args, **kwargs):
     population.native_place_province = native_place_province
     population.native_place_city = native_place_city
     population.native_place_area = native_place_area
-    population.address = address
+    population.address = json.dumps(address)
     population.detail_address = detail_address
     population.voiceprint = voiceprint_json
     population.picture = picture_json
@@ -133,7 +134,7 @@ def population_detail(*args, **kwargs):
         "marital_status": population.marital_status,
         "id_number": population.id_number,
         "native": [population.native_place_province, population.native_place_city, population.native_place_area],
-        "address": population.address,
+        "address": json.loads(population.address),
         "detail_address": population.detail_address,
         "voiceprint": json.loads(population.voiceprint),
         "picture": json.loads(population.picture),

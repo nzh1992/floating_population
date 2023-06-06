@@ -60,7 +60,11 @@ def all_academic(*args, **kwargs):
         }
     ]
 
-    return academic_data
+    resp_data = {
+        'data': academic_data
+    }
+
+    return resp_data
 
 
 @marital_bp.route("/all", methods=["GET"])
@@ -82,4 +86,8 @@ def all_academic(*args, **kwargs):
         }
     ]
 
-    return marital_data
+    resp_data = {
+        'data': marital_data
+    }
+
+    return resp_data

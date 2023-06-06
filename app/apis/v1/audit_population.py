@@ -36,7 +36,8 @@ def audit_population_list(*args, **kwargs):
     pn = data.get("pn")
     pz = data.get("pz")
 
-    query_filter = Population.query.filter()
+    # 过滤掉未审批的数据
+    query_filter = Population.query.filter(Population.enter_status != "UN_AUDIT")
 
     if keyword:
         condition = or_(
@@ -46,7 +47,7 @@ def audit_population_list(*args, **kwargs):
         query_filter.filter(condition)
 
     if status:
-        query_filter.filter(Population.status == status)
+        query_filter.filter(Population.audit_status == status)
 
     if native:
         query_filter.filter(Population.native_place_province == native[0]) \
@@ -71,7 +72,8 @@ def audit_population_list(*args, **kwargs):
             "marital_status": marital,
             "id_number": population.id_number,
             "native": [population.native_place_province, population.native_place_city, population.native_place_area],
-            "status": population.status,
+            "enter_status": population.enter_status,
+            "audit_status": population.audit_status,
             "reason": population.reason
         }
         serialize_population_list.append(population_data)
@@ -106,7 +108,8 @@ def audit_population_detail(*args, **kwargs):
         "detail_address": population.detail_address,
         "voiceprint": json.loads(population.voiceprint),
         "picture": json.loads(population.picture),
-        "status": population.status,
+        "enter_status": population.enter_status,
+        "audit_status": population.audit_status,
         "reason": population.reason
     }
 
@@ -127,7 +130,8 @@ def audit_resolve(*args, **kwargs):
     if not population:
         return ErrorResponse.population_not_found()
 
-    population.status = "RESOLVE"
+    population.enter_status = "RESOLVE"
+    population.audit_status = "RESOLVE"
     population.reason = None
     population.approval_time = DatetimeHelper.get_datetime_str(datetime.datetime.now())
 
@@ -149,7 +153,8 @@ def audit_reject(*args, **kwargs):
     if not population:
         return ErrorResponse.population_not_found()
 
-    population.status = "RESOLVE"
+    population.enter_status = "RESOLVE"
+    population.audit_status = "RESOLVE"
     population.reason = reason
     population.approval_time = DatetimeHelper.get_datetime_str(datetime.datetime.now())
 

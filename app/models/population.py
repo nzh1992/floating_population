@@ -28,10 +28,11 @@ class Population(db.Model):
     marital_status = db.Column(db.String(128))              # 婚姻状况
     voiceprint = db.Column(db.Text)                         # 声纹存放目录列表
     picture = db.Column(db.Text)                            # 图片存放目录列表
-    status = db.Column(db.String(128))                      # 状态
+    enter_status = db.Column(db.String(128))                # 录入状态
+    audit_status = db.Column(db.String(128))                # 审批状态
     reason = db.Column(db.String(255))                      # 拒绝原因
     submission_time = db.Column(db.DateTime)                # 提交时间
     approval_time = db.Column(db.DateTime)                  # 审批时间
 
     def __repr__(self):
-        return f"<Menu id={self.id} name={self.name}>"
+        return f"<Population id={self.id} name={self.name}>"

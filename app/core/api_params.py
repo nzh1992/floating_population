@@ -51,7 +51,7 @@ class AddPopulationParam(BaseModel):
     # 姓名
     name: str
     # 年龄
-    age: int
+    age: Union[int, None]
     # 性别
     gender: str
     # 学历

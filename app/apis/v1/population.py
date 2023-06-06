@@ -50,17 +50,21 @@ def add_population(*args, **kwargs):
     picture_json = json.dumps(picture)
 
     # 默认提交状态为"未审批"
-    status = "UN_AUDIT"
+    enter_status = "UN_AUDIT"
+    audit_status = "UN_AUDIT"
+
     population = Population(name=name, age=age, sex=sex, academic_qualification=academic_qualification,
                             id_number=id_number, address=address_json, detail_address=detail_address,
                             native_place_province=native_place_province, native_place_city=native_place_city,
                             native_place_area=native_place_area, marital_status=marital_status,
-                            status=status, voiceprint=voiceprint_json, picture=picture_json)
+                            enter_status=enter_status, audit_status=audit_status, voiceprint=voiceprint_json,
+                            picture=picture_json)
 
     db.session.add(population)
+    db.session.flush()
     db.session.commit()
 
-    resp_data = {}
+    resp_data = {"id": population.id}
     return resp_data
 
 
@@ -112,7 +116,7 @@ def modify_population(*args, **kwargs):
     db.session.add(population)
     db.session.commit()
 
-    resp_data = {}
+    resp_data = {"id": population.id}
     return resp_data
 
 
@@ -138,7 +142,8 @@ def population_detail(*args, **kwargs):
         "detail_address": population.detail_address,
         "voiceprint": json.loads(population.voiceprint),
         "picture": json.loads(population.picture),
-        "status": population.status,
+        "enter_status": population.enter_status,
+        "audit_status": population.audit_status,
         "reason": population.reason
     }
 
@@ -194,7 +199,8 @@ def population_list(*args, **kwargs):
             "marital_status": marital,
             "id_number": population.id_number,
             "native": [population.native_place_province, population.native_place_city, population.native_place_area],
-            "status": population.status,
+            "enter_status": population.enter_status,
+            "audit_status": population.audit_status,
             "reason": population.reason
         }
         serialize_population_list.append(population_data)
@@ -234,7 +240,7 @@ def submit_population(*args, **kwargs):
     if not population:
         return ErrorResponse.population_not_found()
 
-    population.status = "AUDITING"
+    population.enter_status = "AUDITING"
 
     db.session.add(population)
     db.session.commit()

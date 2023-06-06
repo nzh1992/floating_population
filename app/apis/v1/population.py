@@ -143,7 +143,6 @@ def population_detail(*args, **kwargs):
         "voiceprint": json.loads(population.voiceprint),
         "picture": json.loads(population.picture),
         "enter_status": population.enter_status,
-        "audit_status": population.audit_status,
         "reason": population.reason
     }
 
@@ -200,7 +199,6 @@ def population_list(*args, **kwargs):
             "id_number": population.id_number,
             "native": [population.native_place_province, population.native_place_city, population.native_place_area],
             "enter_status": population.enter_status,
-            "audit_status": population.audit_status,
             "reason": population.reason
         }
         serialize_population_list.append(population_data)

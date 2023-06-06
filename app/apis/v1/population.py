@@ -32,42 +32,29 @@ def add_population(*args, **kwargs):
     # 流动人口基本信息
     name = data.get("name")
     age = data.get("age")
-    sex = data.get("sex")
-    birth = data.get("birth")
+    sex = data.get("gender")
     academic_qualification = data.get("academic_qualification")
-    id_number = data.get("id_number")
-    address = data.get("address")
-    native_place_province = data.get("native_place_province")
-    native_place_city = data.get("native_place_city")
-    native_place_area = data.get("native_place_area")
     marital_status = data.get("marital_status")
+    id_number = data.get("id_number")
+    native = data.get("native")
+    native_place_province = native[0]
+    native_place_city = native[1]
+    native_place_area = native[2]
+    address = data.get("address")
+    detail_address = data.get("detail_address")
+    voiceprint = data.get("voiceprint")
+    picture = data.get("picture")
 
-    # 保存方式
-    save_type = data.get("save_type")    # "保存" 或 "保存并提交"
+    voiceprint_json = json.dumps(voiceprint)
+    picture_json = json.dumps(picture)
 
-    # 提交时间
-    if save_type == "保存并提交":
-        submission_status = "已提交"
-        submission_time = DatetimeHelper.get_current_datetime_str()
-    else:
-        submission_status = "未提交"
-        submission_time = None
-
-    # 审批状态，默认为"未审批"
-    approval_status = "未审批"
-
-    population = Population(name=name, age=age, sex=sex, birth=birth, academic_qualification=academic_qualification,
-                            id_number=id_number, address=address, native_place_province=native_place_province,
-                            native_place_city=native_place_city, native_place_area=native_place_area,
-                            marital_status=marital_status, submission_status=submission_status,
-                            submission_time=submission_time, approval_status=approval_status)
-
-    db.session.add(population)
-    db.session.flush()
-
-    # 数据库生成id，更新图片和声纹存放路径
-    population.set_picture_dir()
-    population.set_voiceprint_dir()
+    # 默认提交状态为"未审批"
+    status = "UN_AUDIT"
+    population = Population(name=name, age=age, sex=sex, academic_qualification=academic_qualification,
+                            id_number=id_number, address=address, detail_address=detail_address,
+                            native_place_province=native_place_province, native_place_city=native_place_city,
+                            native_place_area=native_place_area, marital_status=marital_status,
+                            status=status, voiceprint=voiceprint_json, picture=picture_json)
 
     db.session.add(population)
     db.session.commit()
@@ -81,41 +68,46 @@ def add_population(*args, **kwargs):
 @JWTUtil.verify_token_decorator(request)
 def modify_population(*args, **kwargs):
     population_id = args[1].get("id")
+    population = Population.query.filter(Population.id == population_id).first()
+    if not population:
+        return ErrorResponse.population_not_found()
 
     data = request.get_json(force=True)
 
     # 流动人口基本信息
     name = data.get("name")
     age = data.get("age")
-    sex = data.get("sex")
-    birth = data.get("birth")
+    sex = data.get("gender")
     academic_qualification = data.get("academic_qualification")
-    id_number = data.get("id_number")
-    address = data.get("address")
-    native_place_province = data.get("native_place_province")
-    native_place_city = data.get("native_place_city")
-    native_place_area = data.get("native_place_area")
     marital_status = data.get("marital_status")
+    id_number = data.get("id_number")
+    native = data.get("native")
+    native_place_province = native[0]
+    native_place_city = native[1]
+    native_place_area = native[2]
+    address = data.get("address")
+    detail_address = data.get("detail_address")
+    voiceprint = data.get("voiceprint")
+    picture = data.get("picture")
 
-    # 保存方式
-    save_type = data.get("save_type")  # "保存" 或 "保存并提交"
+    voiceprint_json = json.dumps(voiceprint)
+    picture_json = json.dumps(picture)
 
-    # 提交时间
-    if save_type == "保存并提交":
-        submission_status = "已提交"
-        submission_time = DatetimeHelper.get_current_datetime_str()
-    else:
-        submission_status = "未提交"
-        submission_time = None
+    # 更新人口信息
+    population.name = name
+    population.age = age
+    population.sex = sex
+    population.academic_qualification = academic_qualification
+    population.marital_status = marital_status
+    population.id_number = id_number
+    population.native_place_province = native_place_province
+    population.native_place_city = native_place_city
+    population.native_place_area = native_place_area
+    population.address = address
+    population.detail_address = detail_address
+    population.voiceprint = voiceprint_json
+    population.picture = picture_json
 
-    # 审批状态，默认为"未审批"
-    approval_status = "未审批"
-
-    population = Population(name=name, age=age, sex=sex, birth=birth, academic_qualification=academic_qualification,
-                            id_number=id_number, address=address, native_place_province=native_place_province,
-                            native_place_city=native_place_city, native_place_area=native_place_area,
-                            marital_status=marital_status, submission_status=submission_status,
-                            submission_time=submission_time, approval_status=approval_status)
     db.session.add(population)
     db.session.commit()
 
@@ -136,15 +128,17 @@ def population_detail(*args, **kwargs):
     population_data = {
         "name": population.name,
         "age": population.age,
-        "sex": population.sex,
-        "birth": DatetimeHelper.get_datetime_str(population.birth),
+        "gender": population.sex,
         "academic_qualification": population.academic_qualification,
+        "marital_status": population.marital_status,
         "id_number": population.id_number,
+        "native": [population.native_place_province, population.native_place_city, population.native_place_area],
         "address": population.address,
-        "native_place_province": population.native_place_province,
-        "native_place_city": population.native_place_city,
-        "native_place_area": population.native_place_area,
-        "marital_status": population.marital_status
+        "detail_address": population.detail_address,
+        "voiceprint": json.loads(population.voiceprint),
+        "picture": json.loads(population.picture),
+        "status": population.status,
+        "reason": population.reason
     }
 
     resp_data = {
@@ -155,6 +149,7 @@ def population_detail(*args, **kwargs):
 
 @population_bp.route("/list", methods=["POST"])
 @siwadoc.doc(tags=['population'], summary="流动人口列表")
+@JWTUtil.verify_token_decorator(request)
 def population_list(*args, **kwargs):
     data = request.get_json(force=True)
     keyword = data.get("keyword")
@@ -177,8 +172,7 @@ def population_list(*args, **kwargs):
             "id": population.id,
             "name": population.name,
             "age": population.age,
-            "sex": population.sex,
-            "native_place_province": population.native_place_province
+            "sex": population.sex
         }
         serialize_population_list.append(population_data)
 
@@ -188,3 +182,17 @@ def population_list(*args, **kwargs):
     }
 
     return resp_data
+
+
+@population_bp.route("/<id>", methods=["DELETE"])
+@siwadoc.doc(tags=['population'], summary="删除流动人口")
+@JWTUtil.verify_token_decorator(request)
+def delete_population(*args, **kwargs):
+    population_id = args[1].get("id")
+
+    population = Population.query.filter(Population.id == population_id).first()
+    if not population:
+        return ErrorResponse.population_not_found()
+
+    db.session.delete(population)
+    db.session.commit()

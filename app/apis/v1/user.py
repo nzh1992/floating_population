@@ -126,3 +126,37 @@ def user_detail(*args, **kwargs):
     }
 
     return user_data
+
+
+@user_bp.route("/<id>", methods=["PATCH"])
+@siwadoc.doc(tags=['user'], summary="修改用户")
+@JWTUtil.verify_token_decorator(request)
+def modify_user(*args, **kwargs):
+    user_id = args[1].get("id")
+
+    data = request.get_json(force=True)
+    name = data.get("name")
+    account = data.get("account")
+    password = data.get("password")
+    role_type = data.get("role_type")
+
+    user = User.query.filter(User.id == user_id).first()
+
+    # 查询role
+    role = Role.query.filter(Role.name == role_type).first()
+
+    # 更新
+    user.user_name = name
+    user.account = account
+    user.role_id = role.id
+
+    if password:
+        user.set_password(password)
+
+    db.session.add(user)
+    db.session.commit()
+
+    resp_data = {
+
+    }
+    return resp_data

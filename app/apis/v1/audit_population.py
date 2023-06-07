@@ -30,7 +30,7 @@ audit_bp = Blueprint('audit', __name__, url_prefix=API_PREFIX + '/audit')
 @JWTUtil.verify_token_decorator(request)
 def audit_population_list(*args, **kwargs):
     data = request.get_json(force=True)
-    status = data.get("status")
+    status = data.get("audit_status")
     keyword = data.get("keyword")
     native = data.get("native")
     pn = data.get("pn")
@@ -111,10 +111,7 @@ def audit_population_detail(*args, **kwargs):
         "reason": population.reason
     }
 
-    resp_data = {
-        "data": population_data
-    }
-    return resp_data
+    return population_data
 
 
 @audit_bp.route("/resolve", methods=["POST"])
@@ -151,8 +148,8 @@ def audit_reject(*args, **kwargs):
     if not population:
         return ErrorResponse.population_not_found()
 
-    population.enter_status = "RESOLVE"
-    population.audit_status = "RESOLVE"
+    population.enter_status = "REJECT"
+    population.audit_status = "REJECT"
     population.reason = reason
     population.approval_time = DatetimeHelper.get_datetime_str(datetime.datetime.now())
 

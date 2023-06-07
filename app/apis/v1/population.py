@@ -49,6 +49,11 @@ def add_population(*args, **kwargs):
     voiceprint_json = json.dumps(voiceprint)
     picture_json = json.dumps(picture)
 
+    # 判断身份证号是否已存在
+    population_id_number = Population.query.filter(Population.id_number == id_number).first()
+    if population_id_number:
+        return ErrorResponse.populaiton_id_number_duplicate()
+
     # 默认提交状态为"未审批"
     enter_status = "UN_AUDIT"
     audit_status = "UN_AUDIT"
@@ -146,10 +151,7 @@ def population_detail(*args, **kwargs):
         "reason": population.reason
     }
 
-    resp_data = {
-        "data": population_data
-    }
-    return resp_data
+    return population_data
 
 
 @population_bp.route("/list", methods=["POST"])
@@ -239,6 +241,8 @@ def submit_population(*args, **kwargs):
         return ErrorResponse.population_not_found()
 
     population.enter_status = "AUDITING"
+    population.audit_status = "UN_AUDIT"
+    population.reason = None
 
     db.session.add(population)
     db.session.commit()

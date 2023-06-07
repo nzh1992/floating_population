@@ -61,8 +61,12 @@ class ErrorResponse:
 
     @staticmethod
     def upload_voiceprint_type_error():
-        return make_response(1008, "上传声纹类型错误"), 406
+        return make_response(1009, "上传声纹类型错误"), 406
 
     @staticmethod
     def user_not_found():
-        return make_response(1009, "用户不存在"), 406
+        return make_response(1010, "用户不存在"), 406
+
+    @staticmethod
+    def populaiton_id_number_duplicate():
+        return make_response(1011, "身份证号码重复"), 406

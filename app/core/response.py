@@ -70,3 +70,11 @@ class ErrorResponse:
     @staticmethod
     def populaiton_id_number_duplicate():
         return make_response(1011, "身份证号码重复"), 406
+
+    @staticmethod
+    def image_not_found():
+        return make_response(1012, "图片不存在"), 406
+
+    @staticmethod
+    def voiceprint_not_found():
+        return make_response(1013, "声纹不存在"), 406

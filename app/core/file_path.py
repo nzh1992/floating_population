@@ -34,3 +34,8 @@ class FilePath:
         """获取省市区文件路径"""
         file_path = os.path.join(cls.get_root_path(), "region", "最新县及县以上行政区划代码.txt")
         return file_path
+
+    @classmethod
+    def get_file_path_by_preview_url(cls, uuid_value, file_type, file_name):
+        file_path = os.path.join(cls.get_root_path(), "files", uuid_value, file_type, file_name)
+        return file_path

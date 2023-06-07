@@ -17,7 +17,8 @@ SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:123456@47.103.15.19/floating_pop
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
-DOMAIN = "http://47.103.15.19"
+# DOMAIN = "http://47.103.15.19"
+DOMAIN = "http://localhost:6500"
 
 # 上传图片、声纹文件的最大值
 # 注意Nginx上也要配置

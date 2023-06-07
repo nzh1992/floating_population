@@ -83,7 +83,7 @@ def upload_voiceprint(*args, **kwargs):
     file.save(save_fp)
 
     # 下载url
-    url = current_app.config['DOMAIN'] + f'/preview/{temp_file_uuid}/voiceprints/{file_name}'
+    url = current_app.config['DOMAIN'] + f'/download/{temp_file_uuid}/voiceprints/{file_name}'
 
     return {
         'url': url

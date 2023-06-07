@@ -160,7 +160,7 @@ def population_detail(*args, **kwargs):
 def population_list(*args, **kwargs):
     data = request.get_json(force=True)
     keyword = data.get("keyword")
-    audit_status = data.get("audit_status")
+    enter_status = data.get("enter_status")
     native = data.get("native")
     pn = data.get("pn")
     pz = data.get("pz")
@@ -172,13 +172,13 @@ def population_list(*args, **kwargs):
             Population.name.like(f"%{keyword}%"),
             Population.id_number.like(f"%{keyword}%")
         )
-        query_filter.filter(condition)
+        query_filter = query_filter.filter(condition)
 
-    if audit_status:
-        query_filter.filter(Population.status == audit_status)
+    if enter_status:
+        query_filter = query_filter.filter(Population.enter_status == enter_status)
 
     if native:
-        query_filter.filter(Population.native_place_province == native[0])\
+        query_filter = query_filter.filter(Population.native_place_province == native[0])\
             .filter(Population.native_place_city == native[1])\
             .filter(Population.native_place_area == native[2])
 

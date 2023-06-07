@@ -12,7 +12,8 @@ DEBUG = True
 SECRET_KEY = "dev"
 
 
-SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:Nzh199266!@localhost/floating_population?charset=utf8mb4"
+# SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:Nzh199266!@localhost/floating_population?charset=utf8mb4"
+SQLALCHEMY_DATABASE_URI = "mysql+pymysql://root:123456@47.103.15.19/floating_population?charset=utf8mb4"
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 

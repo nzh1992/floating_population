@@ -44,13 +44,13 @@ def audit_population_list(*args, **kwargs):
             Population.name.like(f"%{keyword}%"),
             Population.id_number.like(f"%{keyword}%")
         )
-        query_filter.filter(condition)
+        query_filter = query_filter.filter(condition)
 
     if status:
-        query_filter.filter(Population.audit_status == status)
+        query_filter = query_filter.filter(Population.audit_status == status)
 
     if native:
-        query_filter.filter(Population.native_place_province == native[0]) \
+        query_filter = query_filter.filter(Population.native_place_province == native[0]) \
             .filter(Population.native_place_city == native[1]) \
             .filter(Population.native_place_area == native[2])
 

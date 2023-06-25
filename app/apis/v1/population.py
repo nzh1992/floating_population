@@ -45,6 +45,7 @@ def add_population(*args, **kwargs):
     detail_address = data.get("detail_address")
     voiceprint = data.get("voiceprint")
     picture = data.get("picture")
+    flow_status = data.get("flow_status")
 
     voiceprint_json = json.dumps(voiceprint)
     picture_json = json.dumps(picture)
@@ -63,7 +64,7 @@ def add_population(*args, **kwargs):
                             native_place_province=native_place_province, native_place_city=native_place_city,
                             native_place_area=native_place_area, marital_status=marital_status,
                             enter_status=enter_status, audit_status=audit_status, voiceprint=voiceprint_json,
-                            picture=picture_json)
+                            picture=picture_json, flow_status=flow_status)
 
     db.session.add(population)
     db.session.flush()
@@ -99,6 +100,7 @@ def modify_population(*args, **kwargs):
     detail_address = data.get("detail_address")
     voiceprint = data.get("voiceprint")
     picture = data.get("picture")
+    flow_status = data.get("flow_status")
 
     voiceprint_json = json.dumps(voiceprint)
     picture_json = json.dumps(picture)
@@ -117,6 +119,7 @@ def modify_population(*args, **kwargs):
     population.detail_address = detail_address
     population.voiceprint = voiceprint_json
     population.picture = picture_json
+    population.flow_status = flow_status
 
     db.session.add(population)
     db.session.commit()
@@ -148,7 +151,8 @@ def population_detail(*args, **kwargs):
         "voiceprint": json.loads(population.voiceprint),
         "picture": json.loads(population.picture),
         "enter_status": population.enter_status,
-        "reason": population.reason
+        "reason": population.reason,
+        "flow_status": population.flow_status
     }
 
     return population_data
@@ -162,6 +166,7 @@ def population_list(*args, **kwargs):
     keyword = data.get("keyword")
     enter_status = data.get("enter_status")
     native = data.get("native")
+    flow_status = data.get("flow_status")
     pn = data.get("pn")
     pz = data.get("pz")
 
@@ -181,6 +186,9 @@ def population_list(*args, **kwargs):
         query_filter = query_filter.filter(Population.native_place_province == native[0])\
             .filter(Population.native_place_city == native[1])\
             .filter(Population.native_place_area == native[2])
+
+    if flow_status:
+        query_filter = query_filter.filter(Population.flow_status == flow_status)
 
     total = query_filter.count()
 

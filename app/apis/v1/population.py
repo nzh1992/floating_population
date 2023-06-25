@@ -209,7 +209,8 @@ def population_list(*args, **kwargs):
             "id_number": population.id_number,
             "native": [population.native_place_province, population.native_place_city, population.native_place_area],
             "enter_status": population.enter_status,
-            "reason": population.reason
+            "reason": population.reason,
+            "flow_status": population.flow_status
         }
         serialize_population_list.append(population_data)
 

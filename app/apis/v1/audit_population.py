@@ -33,6 +33,7 @@ def audit_population_list(*args, **kwargs):
     status = data.get("audit_status")
     keyword = data.get("keyword")
     native = data.get("native")
+    flow_status = data.get("flow_status")
     pn = data.get("pn")
     pz = data.get("pz")
 
@@ -54,6 +55,9 @@ def audit_population_list(*args, **kwargs):
             .filter(Population.native_place_city == native[1]) \
             .filter(Population.native_place_area == native[2])
 
+    if flow_status:
+        query_filter = query_filter.filter(Population.flow_status == flow_status)
+
     total = query_filter.count()
 
     start = (pn - 1) * pz
@@ -73,7 +77,8 @@ def audit_population_list(*args, **kwargs):
             "id_number": population.id_number,
             "native": [population.native_place_province, population.native_place_city, population.native_place_area],
             "audit_status": population.audit_status,
-            "reason": population.reason
+            "reason": population.reason,
+            "flow_status": population.flow_status
         }
         serialize_population_list.append(population_data)
 
@@ -108,7 +113,8 @@ def audit_population_detail(*args, **kwargs):
         "voiceprint": json.loads(population.voiceprint),
         "picture": json.loads(population.picture),
         "audit_status": population.audit_status,
-        "reason": population.reason
+        "reason": population.reason,
+        "flow_status": population.flow_status
     }
 
     return population_data

@@ -34,6 +34,7 @@ class Population(db.Model):
     submission_time = db.Column(db.DateTime)                # 提交时间
     approval_time = db.Column(db.DateTime)                  # 审批时间
     flow_status = db.Column(db.String(128))                 # 流入还是流出
+    create_time = db.Column(db.DateTime)                    # 创建时间
 
     def __repr__(self):
         return f"<Population id={self.id} name={self.name}>"

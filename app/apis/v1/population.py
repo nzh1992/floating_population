@@ -60,12 +60,14 @@ def add_population(*args, **kwargs):
     enter_status = "UN_AUDIT"
     audit_status = "UN_AUDIT"
 
+    create_time = DatetimeHelper.get_current_datetime_str()
+
     population = Population(name=name, age=age, sex=sex, academic_qualification=academic_qualification,
                             id_number=id_number, address=address_json, detail_address=detail_address,
                             native_place_province=native_place_province, native_place_city=native_place_city,
                             native_place_area=native_place_area, marital_status=marital_status,
                             enter_status=enter_status, audit_status=audit_status, voiceprint=voiceprint_json,
-                            picture=picture_json, flow_status=flow_status)
+                            picture=picture_json, flow_status=flow_status, create_time=create_time)
 
     db.session.add(population)
     db.session.flush()
@@ -190,6 +192,9 @@ def population_list(*args, **kwargs):
 
     if flow_status:
         query_filter = query_filter.filter(Population.flow_status == flow_status)
+
+    # 根据创建时间排序
+    query_filter = query_filter.order_by(Population.create_time.desc())
 
     total = query_filter.count()
 

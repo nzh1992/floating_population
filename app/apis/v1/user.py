@@ -95,6 +95,11 @@ def create_user(*args, **kwargs):
     # 查询role
     role = Role.query.filter(Role.name == role_type).first()
 
+    # 检查账号是否存在
+    account_is_exist = User.query.filter(User.account == account).first()
+    if account_is_exist:
+        return ErrorResponse.account_exist()
+
     user = User(account=account, user_name=name, phone=None, role_id=role.id)
     user.set_password(password)
 

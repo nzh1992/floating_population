@@ -58,6 +58,9 @@ def audit_population_list(*args, **kwargs):
     if flow_status:
         query_filter = query_filter.filter(Population.flow_status == flow_status)
 
+    # 根据创建时间排序
+    query_filter = query_filter.order_by(Population.create_time.desc())
+
     total = query_filter.count()
 
     start = (pn - 1) * pz

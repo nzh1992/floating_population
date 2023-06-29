@@ -39,8 +39,10 @@ def count_by_month(*args, **kwargs):
 @siwadoc.doc(tags=['statistic'], summary="流入流出占比")
 @JWTUtil.verify_token_decorator(request)
 def proportion_of_import(*args, **kwargs):
-    import_count = Population.query.filter(Population.flow_status == 'IMPORT').count()
-    export_count = Population.query.filter(Population.flow_status == 'EXPORT').count()
+    import_count = Population.query.filter(Population.flow_status == 'IMPORT').\
+        filter(Population.audit_status == 'RESOLVE').count()
+    export_count = Population.query.filter(Population.flow_status == 'EXPORT').\
+        filter(Population.audit_status == 'RESOLVE').count()
 
     resp_data = {
         "import": import_count,

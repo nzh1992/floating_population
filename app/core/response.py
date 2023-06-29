@@ -78,3 +78,7 @@ class ErrorResponse:
     @staticmethod
     def voiceprint_not_found():
         return make_response(1013, "声纹不存在"), 406
+
+    @staticmethod
+    def account_exist():
+        return make_response(1014, "账号已存在"), 406

@@ -16,6 +16,7 @@ from app.core.jwt import JWTUtil
 from app.core.response import Response, ErrorResponse
 from app.core.enums import MaritalEnum
 from app.core.api_params import AddPopulationParam
+from app.core.datetime_helper import DatetimeHelper
 from app.extentions import siwadoc, db
 from app.models.population import Population
 
@@ -252,6 +253,8 @@ def submit_population(*args, **kwargs):
     population.enter_status = "AUDITING"
     population.audit_status = "UN_AUDIT"
     population.reason = None
+
+    population.submission_time = DatetimeHelper.get_current_datetime_str()
 
     db.session.add(population)
     db.session.commit()

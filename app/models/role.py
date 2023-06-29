@@ -28,7 +28,7 @@ class Role(db.Model):
         role_ids = [r.id for r in roles]
 
         # 管理员
-        admin_menu_ids = json.dumps([1,2,3])
+        admin_menu_ids = json.dumps([1,2,3,4])
         admin = cls(id=1, name="ADMIN", menu_ids=admin_menu_ids)
 
         # 录入员

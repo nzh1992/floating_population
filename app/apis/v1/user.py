@@ -150,6 +150,11 @@ def modify_user(*args, **kwargs):
     # 查询role
     role = Role.query.filter(Role.name == role_type).first()
 
+    # 检查账号是否存在
+    account_is_exist = User.query.filter(User.id != user_id).filter(User.account == account).first()
+    if account_is_exist:
+        return ErrorResponse.account_exist()
+
     # 更新
     user.user_name = name
     user.account = account
